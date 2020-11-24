@@ -12,6 +12,7 @@ end
 require 'fileutils'
 require 'open3'
 require 'rexml/document'
+require 'sassc'
 require 'selenium-webdriver'
 
 require_relative 'slide/converter'

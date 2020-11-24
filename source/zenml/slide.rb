@@ -3,7 +3,7 @@
 
 module Zenithal::Slide
 
-  VERSION = "1.0.0"
+  VERSION = "1.0.1"
   VERSION_ARRAY = VERSION.split(/\./).map(&:to_i)
 
 end

@@ -82,7 +82,7 @@ class Zenithal::Slide::WholeSlideConverter
     output_dir = File.dirname(output_path)
     count = File.read(count_path).to_i
     FileUtils.mkdir_p(output_dir)
-    @driver.navigate.to("file:///#{page_path}")
+    @driver.navigate.to("file:///#{File.join(Dir.pwd, page_path)}")
     @driver.manage.window.resize_to(*@image_size)
     @driver.execute_script("document.body.classList.add('simple');")
     count.times do |index|

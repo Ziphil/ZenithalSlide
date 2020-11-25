@@ -3,6 +3,8 @@
 
 class Zenithal::Slide::WholeSlideConverter
 
+  TEMPLATE = File.read(File.join(File.dirname(__FILE__), "resource/template.html"))
+
   def initialize(args)
     @mode, @open = nil, false
     @dirs = {:output => "out", :document => "document", :template => "template"}
@@ -59,8 +61,10 @@ class Zenithal::Slide::WholeSlideConverter
       @parser.update(File.read(path))
       document = @parser.run
       @converter.update(document)
-      output = @converter.convert
+      main_string = @converter.convert
+      header_string = ""
       count = @converter.variables[:slide_count].to_i.to_s
+      output = TEMPLATE.gsub(/#\{(.*?)\}/){instance_eval($1)}.gsub(/\r/, "")
       File.write(output_path, output)
       File.write(count_path, count)
     when "scss"

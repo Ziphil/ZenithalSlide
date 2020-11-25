@@ -4,6 +4,7 @@
 class Zenithal::Slide::WholeSlideConverter
 
   TEMPLATE = File.read(File.join(File.dirname(__FILE__), "resource/template.html"))
+  SCRIPT = File.read(File.join(File.dirname(__FILE__), "resource/script.js"))
 
   def initialize(args)
     @mode, @open = nil, false
@@ -61,9 +62,10 @@ class Zenithal::Slide::WholeSlideConverter
       @parser.update(File.read(path))
       document = @parser.run
       @converter.update(document)
-      main_string = @converter.convert
       header_string = ""
+      main_string = @converter.convert
       count = @converter.variables[:slide_count].to_i.to_s
+      header_string << "<script type=\"text/javascript\">#{SCRIPT}</script>"
       output = TEMPLATE.gsub(/#\{(.*?)\}/){instance_eval($1)}.gsub(/\r/, "")
       File.write(output_path, output)
       File.write(count_path, count)
@@ -108,7 +110,6 @@ class Zenithal::Slide::WholeSlideConverter
       if @mode == :normal
         dirs << File.join(@dirs[:document], "asset") 
         paths << File.join(@dirs[:document], "style", "style.scss")
-        paths << File.join(@dirs[:document], "script", "script.js")
       end
       dirs.each do |dir|
         Dir.each_child(dir) do |entry|

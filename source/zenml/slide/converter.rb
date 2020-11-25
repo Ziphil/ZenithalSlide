@@ -9,6 +9,7 @@ class Zenithal::Slide::WholeSlideConverter
   def initialize(args)
     @mode, @open = nil, false
     @dirs = {:output => "out", :document => "document", :template => "template"}
+    @asset_paths = {:style => ["style/style.css"]}
     @image_size = [1920, 1080]
     options, rest_args = args.partition{|s| s =~ /^\-\w$/}
     if options.include?("-i")
@@ -65,7 +66,8 @@ class Zenithal::Slide::WholeSlideConverter
       header_string = ""
       main_string = @converter.convert
       count = @converter.variables[:slide_count].to_i.to_s
-      header_string << "<script type=\"text/javascript\">#{SCRIPT}</script>"
+      header_string << "<script type=\"text/javascript\">#{SCRIPT}</script>\n"
+      header_string << @asset_paths[:style].map{|s| "<link rel=\"stylesheet\" type=\"text/css\" href=\"../#{s}\">\n"}.join
       output = TEMPLATE.gsub(/#\{(.*?)\}/){instance_eval($1)}.gsub(/\r/, "")
       File.write(output_path, output)
       File.write(count_path, count)
@@ -109,7 +111,9 @@ class Zenithal::Slide::WholeSlideConverter
       dirs << File.join(@dirs[:document], "slide")
       if @mode == :normal
         dirs << File.join(@dirs[:document], "asset") 
-        paths << File.join(@dirs[:document], "style", "style.scss")
+        @asset_paths[:style].each do |style_path|
+          paths << File.join(@dirs[:document], style_path)
+        end
       end
       dirs.each do |dir|
         Dir.each_child(dir) do |entry|

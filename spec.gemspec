@@ -8,7 +8,7 @@ end
 
 Gem::Specification.new do |spec|
   spec.name = "zenml-slide"
-  spec.version = "1.0.2"
+  spec.version = "1.1.0"
   spec.authors = ["Ziphil"]
   spec.email = ["ziphil.shaleiras@gmail.com"]
   spec.licenses = ["MIT"]
@@ -22,6 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency("sassc")
   spec.add_runtime_dependency("selenium-webdriver")
 
-  spec.files = Dir.glob("source/**/*.rb")
+  spec.files = Dir.glob("source/**/*")
   spec.require_paths = ["source"]
 end

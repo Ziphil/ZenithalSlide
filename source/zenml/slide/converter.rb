@@ -10,6 +10,7 @@ class Zenithal::Slide::WholeSlideConverter
     @mode, @open = nil, false
     @dirs = {:output => "out", :document => "document", :template => "template"}
     @asset_paths = {:style => ["style/style.css"]}
+    @title = "Slide"
     @image_size = [1920, 1080]
     options, rest_args = args.partition{|s| s =~ /^\-\w$/}
     if options.include?("-i")
@@ -189,6 +190,14 @@ class Zenithal::Slide::WholeSlideConverter
 
   def template_dir=(dir)
     @dirs[:template] = dir
+  end
+
+  def script_paths=(paths)
+    @asset_paths[:script] = paths
+  end
+
+  def title=(title)
+    @title = title
   end
 
   def image_size=(image_size)

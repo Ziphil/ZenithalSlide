@@ -9,7 +9,7 @@ class Zenithal::Slide::WholeSlideConverter
   def initialize(args)
     @mode, @open = nil, false
     @dirs = {:output => "out", :document => "document", :template => "template"}
-    @asset_paths = {:style => ["style/style.css"]}
+    @asset_paths = {:style => ["style/style.scss"]}
     @title = "Slide"
     @image_size = [1920, 1080]
     options, rest_args = args.partition{|s| s =~ /^\-\w$/}
@@ -68,7 +68,7 @@ class Zenithal::Slide::WholeSlideConverter
       main_string = @converter.convert
       count = @converter.variables[:slide_count].to_i.to_s
       header_string << "<script type=\"text/javascript\">#{SCRIPT}</script>\n"
-      header_string << @asset_paths[:style].map{|s| "<link rel=\"stylesheet\" type=\"text/css\" href=\"../#{s}\">\n"}.join
+      header_string << @asset_paths[:style].map{|s| "<link rel=\"stylesheet\" type=\"text/css\" href=\"../#{modify_extension(s)}\">\n"}.join
       output = TEMPLATE.gsub(/#\{(.*?)\}/){instance_eval($1)}.gsub(/\r/, "")
       File.write(output_path, output)
       File.write(count_path, count)

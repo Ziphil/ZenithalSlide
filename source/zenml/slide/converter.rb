@@ -85,18 +85,22 @@ class Zenithal::Slide::WholeSlideConverter
   end
 
   def convert_image(path)
+    extension = File.extname(path).gsub(/^\./, "")
     page_path = path.gsub(@dirs[:document], @dirs[:output]).then(&method(:modify_extension))
     output_path = path.gsub(@dirs[:document], @dirs[:output]).gsub("slide", "image").gsub(".zml", "")
     count_path = path.gsub(@dirs[:document], @dirs[:output]).gsub("slide", "image").gsub(".zml", ".txt")
     output_dir = File.dirname(output_path)
-    count = File.read(count_path).to_i
     FileUtils.mkdir_p(output_dir)
-    @driver.navigate.to("file:///#{File.join(Dir.pwd, page_path)}")
-    @driver.manage.window.resize_to(*@image_size)
-    @driver.execute_script("document.body.classList.add('simple');")
-    count.times do |index|
-      @driver.execute_script("document.querySelectorAll('*[class$=\\'slide\\']')[#{index}].scrollIntoView();")
-      @driver.save_screenshot("#{output_path}-#{index}.png")
+    case extension
+    when "zml"
+      count = File.read(count_path).to_i
+      @driver.navigate.to("file:///#{File.join(Dir.pwd, page_path)}")
+      @driver.manage.window.resize_to(*@image_size)
+      @driver.execute_script("document.body.classList.add('simple');")
+      count.times do |index|
+        @driver.execute_script("document.querySelectorAll('*[class$=\\'slide\\']')[#{index}].scrollIntoView();")
+        @driver.save_screenshot("#{output_path}-#{index}.png")
+      end
     end
   end
 
